@@ -78,7 +78,7 @@ public class OperationController {
         System.out.println("ON POST REQUEST");
         return new ResponseEntity<>(body, httpStatus);
     }
-    
+
     @ResponseBody
     @RequestMapping(method = RequestMethod.PATCH)
     void patchById(@RequestParam(value = "id") Long id, @RequestParam(value = "currency") String currency) {
