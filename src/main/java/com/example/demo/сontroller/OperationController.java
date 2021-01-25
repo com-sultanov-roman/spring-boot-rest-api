@@ -4,6 +4,10 @@ import com.example.demo.model.Operation;
 import com.example.demo.repository.OperationRepository;
 import com.example.demo.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -39,12 +43,18 @@ public class OperationController {
 
     @ResponseBody
     @RequestMapping(value = "/*", method = RequestMethod.GET)
-    public String getAll() {
-        List<Operation> operations = (List<Operation>) operationRepository.findAll();
+    public String getAll(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+
         StringBuilder response = new StringBuilder();
+
+        Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
+
+        Page<Operation> operations =  operationRepository.findAll(pageable);
+
         for (Operation operation : operations) {
             response.append("<p>").append(operation.toString()).append("</p>");
         }
+
         return response.toString();
     }
 
