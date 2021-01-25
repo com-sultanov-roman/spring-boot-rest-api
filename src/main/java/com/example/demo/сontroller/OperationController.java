@@ -25,7 +25,7 @@ public class OperationController {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getOperationById(@RequestParam("id") Long id) {
 
         String response = "No such operation";
@@ -38,7 +38,7 @@ public class OperationController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/all")
+    @RequestMapping(value = "/*", method = RequestMethod.GET)
     public String getAll() {
         List<Operation> operations = (List<Operation>) operationRepository.findAll();
         StringBuilder response = new StringBuilder();
@@ -78,14 +78,35 @@ public class OperationController {
         System.out.println("ON POST REQUEST");
         return new ResponseEntity<>(body, httpStatus);
     }
+    
+    @ResponseBody
+    @RequestMapping(method = RequestMethod.PATCH)
+    void patchById(@RequestParam(value = "id") Long id, @RequestParam(value = "currency") String currency) {
+        System.out.println("visited");
+        Operation operation = operationRepository.findById(id).orElse(null);
+
+        if (operation != null) {
+            operation.setCurrency(currency);
+            operationRepository.save(operation);
+
+        }
+    }
+
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseEntity<Object> delete() {
+    public ResponseEntity<Object> deleteById(@RequestParam(name = "id") Long id) {
 
+        String body = "no operation with id=" + id.toString();
 
+        Operation operation = operationRepository.findById(id).orElse(null);
 
-        return new ResponseEntity<>("BKG", HttpStatus.ACCEPTED);
+        if (operation != null) {
+            operationRepository.delete(operation);
+            body = "DELETED";
+        }
+
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 }
 

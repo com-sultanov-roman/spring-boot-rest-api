@@ -8,6 +8,13 @@ import java.math.BigDecimal;
 @Entity
 public class Operation {
 
+    static enum properties {STATUS,
+        SENDER_CARD_ID,
+        RECIPIENT_ID,
+        PAYMENT_AMOUNT,
+        PAYMENT_COMMISSION,
+        CURRENCY}
+
     @Id
     @GeneratedValue
     private Long id;
@@ -26,9 +33,10 @@ public class Operation {
 
     private int hash;
 
-    protected Operation() {}
+    protected Operation() {
+    }
 
-    public Operation(int status, int senderCardId, int recipientCardId, BigDecimal paymentAmount, BigDecimal paymentCommission, String currency){
+    public Operation(int status, int senderCardId, int recipientCardId, BigDecimal paymentAmount, BigDecimal paymentCommission, String currency) {
         this.status = status;
         this.senderCardId = senderCardId;
         this.recipientCardId = recipientCardId;
@@ -38,56 +46,56 @@ public class Operation {
         this.hash = this.toString().hashCode();
     }
 
-    public Integer getStatus(){
+    public Integer getStatus() {
         return this.status;
     }
 
-    public Integer getSenderCardId(){
+    public Integer getSenderCardId() {
         return this.senderCardId;
     }
 
-    public Integer getRecipientCardId(){
+    public Integer getRecipientCardId() {
         return recipientCardId;
     }
 
-    public BigDecimal getPaymentAmount(){
+    public BigDecimal getPaymentAmount() {
         return this.paymentAmount;
     }
 
-    public BigDecimal getPaymentCommission(){
+    public BigDecimal getPaymentCommission() {
         return this.paymentCommission;
     }
 
-    public String getCurrency(){
-        return  this.currency;
+    public String getCurrency() {
+        return this.currency;
     }
 
-    public void setStatus(int status){
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public void setSenderCardId(int senderCardId){
+    public void setSenderCardId(int senderCardId) {
         this.senderCardId = senderCardId;
     }
 
-    public void setRecipientCardId(int recipientCardId){
+    public void setRecipientCardId(int recipientCardId) {
         this.recipientCardId = recipientCardId;
     }
 
-    public void setPaymentAmount(BigDecimal paymentAmount){
+    public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
 
-    public void setPaymentCommission(BigDecimal paymentCommission){
+    public void setPaymentCommission(BigDecimal paymentCommission) {
         this.paymentCommission = paymentCommission;
     }
 
-    public void setCurrency(String currency){
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         String string = "";
         string += "currency: " + this.currency.toString() + ", ";
         string += "payment amount: " + this.paymentAmount.toString() + ", ";
@@ -99,8 +107,12 @@ public class Operation {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return hash;
+    }
+
+    void updateField(String propertyName, String value) {
+
     }
 
 

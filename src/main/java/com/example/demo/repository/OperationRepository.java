@@ -16,4 +16,6 @@ public interface OperationRepository extends CrudRepository<Operation, Long> {
     Collection<Operation> getByHash(@Param("hash") Integer hash);
 
 
+
+
 }
