@@ -25,10 +25,10 @@ public class OperationController {
     }
 
     @ResponseBody
-    @RequestMapping
+    @RequestMapping(method = RequestMethod.GET)
     public String getOperationById(@RequestParam("id") Long id) {
 
-        String response = "No such user";
+        String response = "No such operation";
 
         Operation operation = this.operationRepository.findById(id).orElse(null);
 
@@ -48,12 +48,6 @@ public class OperationController {
         return response.toString();
     }
 
-//    @ResponseBody
-//    @RequestMapping(value = "id/{id}", method = RequestMethod.GET)
-//    public String getById(@PathVariable("id") Long id) {
-//        Optional<Operation> operation = operationRepository.findById(id);
-//        return operation.getCurrency();
-//    }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestParam(value = "status") Integer status,
