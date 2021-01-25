@@ -4,6 +4,8 @@
 
 get operation by id
 
+http://localhost:8080/* returns all operations in database
+
 ### POST
 
 Creates new operation with specified parameters.  
@@ -20,4 +22,4 @@ Parameters: id.
 
 Updates currency by an id.
 
-Parameters: id, currency/
+Parameters: id, currency
