@@ -20,4 +20,4 @@ Parameters: id.
 
 Updates currency by an id.
 
-Parameters: id, currency/
+Parameters: id, currency
