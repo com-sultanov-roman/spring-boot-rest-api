@@ -8,7 +8,7 @@ get operation by id
 
 Creates new operation with specified parameters.  
 
-Parameters: status, paymentAmount, currency, senderCardId, recipientCardId.
+Parameters: status, paymentAmount, paymentCommission, currency, senderCardId, recipientCardId.
 
 ### DELETE
 
