@@ -32,29 +32,36 @@ public class OperationController {
 
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getOperationById(@RequestParam("id") Long id) {
+    public String getOperationById(@RequestParam("id") Long id) throws JsonProcessingException {
 
         String response = "No such operation";
 
         Operation operation = this.operationRepository.findById(id).orElse(null);
 
-        if (operation != null) response = operation.toString();
+        ObjectMapper objectMapper = new ObjectMapper();
+        TreeMap<String, Operation> map = new TreeMap<>();
+        map.put("operation", operation);
+
+        if (operation != null)
+            response = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
 
         return response;
     }
 
     @ResponseBody
     @RequestMapping(value = "/*", method = RequestMethod.GET)
-    public Map<String, List<Operation>> getAll(@RequestParam(value = "page") int page,
-                                               @RequestParam(value = "limit") int limit) {
+    public String getAll(@RequestParam(value = "page", defaultValue = "0") int page,
+                                               @RequestParam(value = "limit", defaultValue = "5") int limit) throws JsonProcessingException {
 
         Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
         Map<String, List<Operation>> map = new TreeMap<>();
 
+        ObjectMapper objectMapper = new ObjectMapper();
+
         map.put("operations", operationRepository.findAll(pageable).toList());
 
-        return map;
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
     }
 
 
