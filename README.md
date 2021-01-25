@@ -1,22 +1,22 @@
-##Readme
+## Readme
 
-###GET
+### GET
 
 get operation by id
 
-###POST
+### POST
 
 Creates new operation with specified parameters.  
 
 Parameters: status, paymentAmount, currency, senderCardId, recipientCardId.
 
-###DELETE
+### DELETE
 
 Deletes the operation with specified id.  
 
 Parameters: id.
 
-###PATCH
+### PATCH
 
 Updates currency by an id.
 
