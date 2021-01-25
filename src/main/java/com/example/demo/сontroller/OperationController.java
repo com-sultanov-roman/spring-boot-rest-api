@@ -3,7 +3,11 @@ package com.example.demo.сontroller;
 import com.example.demo.model.Operation;
 import com.example.demo.repository.OperationRepository;
 import com.example.demo.service.OperationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class OperationController {
@@ -43,19 +45,16 @@ public class OperationController {
 
     @ResponseBody
     @RequestMapping(value = "/*", method = RequestMethod.GET)
-    public String getAll(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
-
-        StringBuilder response = new StringBuilder();
+    public Map<String, List<Operation>> getAll(@RequestParam(value = "page") int page,
+                                               @RequestParam(value = "limit") int limit) {
 
         Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
 
-        Page<Operation> operations =  operationRepository.findAll(pageable);
+        Map<String, List<Operation>> map = new TreeMap<>();
 
-        for (Operation operation : operations) {
-            response.append("<p>").append(operation.toString()).append("</p>");
-        }
+        map.put("operations", operationRepository.findAll(pageable).toList());
 
-        return response.toString();
+        return map;
     }
 
 
