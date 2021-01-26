@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.configs;
 
 
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @EnableWebSecurity
+
 public class WebConfig extends WebSecurityConfigurerAdapter {
 
 

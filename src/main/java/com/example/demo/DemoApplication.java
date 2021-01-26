@@ -3,11 +3,16 @@ package com.example.demo;
 import com.example.demo.model.Operation;
 import com.example.demo.repository.OperationRepository;
 import com.sun.istack.NotNull;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 import jdk.jfr.Enabled;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.annotation.Secured;
 
 import java.math.BigDecimal;
@@ -52,7 +57,22 @@ public class DemoApplication {
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class);
         OperationRepository repository = context.getBean(OperationRepository.class);
 
-        //generate5kOperations(repository);
+        generate5kOperations(repository);
+
+    }
+
+    @Bean
+    public OpenAPI customOpenApi(@Value("${application-description}") String appDesciption,
+                                 @Value("${application-version}") String appVersion){
+            return new OpenAPI()
+                    .info(
+                            new Info()
+                            .title("Spring-boot-rest-api")
+                            .version(appVersion)
+                            .description(appDesciption)
+                            .termsOfService("http://swagger.io/terms/")
+                            .license(new License().name("Apache 2.0").url("http://springdoc.org")
+                    ));
 
     }
 
