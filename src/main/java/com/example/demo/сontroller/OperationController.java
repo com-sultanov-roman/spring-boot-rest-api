@@ -1,16 +1,13 @@
 package com.example.demo.сontroller;
 
 import com.example.demo.model.Operation;
-import com.example.demo.repository.OperationRepository;
+import com.example.demo.service.OperationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springdoc.core.annotations.RouterOperation;
-import org.springdoc.core.annotations.RouterOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,24 +26,23 @@ public class OperationController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OperationController.class);
 
-    private final OperationRepository operationRepository;
+    private final OperationService operationService;
 
     @Autowired
-    public OperationController(OperationRepository operationRepository) {
-        this.operationRepository = operationRepository;
+    public OperationController(OperationService operationService) {
+        this.operationService = operationService;
     }
 
 
     @ApiResponse(description = "Operation by specified id")
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getOperationById(@Parameter(name = "id", description = "operation id")
-                                       @RequestParam("id") Long id) throws JsonProcessingException {
+                                   @RequestParam("id") Long id) throws JsonProcessingException {
 
         LOGGER.info("GET operation with id: " + id);
-
         String response = "No such operation";
 
-        Operation operation = this.operationRepository.findById(id).orElse(null);
+        Operation operation = this.operationService.getById(id);
 
         ObjectMapper objectMapper = new ObjectMapper();
         TreeMap<String, Operation> map = new TreeMap<>();
@@ -76,7 +72,7 @@ public class OperationController {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        map.put("operations", operationRepository.findAll(pageable).toList());
+        map.put("operations", operationService.getAll(pageable).getContent());
 
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
     }
@@ -106,10 +102,10 @@ public class OperationController {
         LOGGER.info("POST operation: " + operation);
 
 
-        Collection<Operation> operations = operationRepository.getByHash(operation.hashCode());
+        Collection<Operation> operations = operationService.getByHash(operation.hashCode());
 
         if (operations.isEmpty()) {
-            this.operationRepository.save(operation);
+            this.operationService.save(operation);
             body = "OK";
             httpStatus = HttpStatus.CREATED;
             LOGGER.info("operation already exists");
@@ -126,11 +122,11 @@ public class OperationController {
     @RequestMapping(method = RequestMethod.PATCH)
     void patchById(@RequestParam(value = "id") Long id, @RequestParam(value = "currency") String currency) {
         System.out.println("visited");
-        Operation operation = operationRepository.findById(id).orElse(null);
+        Operation operation = operationService.getById(id);
 
         if (operation != null) {
             operation.setCurrency(currency);
-            operationRepository.save(operation);
+            operationService.save(operation);
             LOGGER.info("PATCH. Modified. Patched operation: " + operation);
         } else {
             LOGGER.info("PATCH. No such operation with id: " + id);
@@ -144,10 +140,10 @@ public class OperationController {
 
         String body = "no operation with id=" + id.toString();
 
-        Operation operation = operationRepository.findById(id).orElse(null);
+        Operation operation = operationService.getById(id);
 
         if (operation != null) {
-            operationRepository.delete(operation);
+            operationService.delete(operation);
             body = "DELETED";
             LOGGER.info("DELETE. Success. Deleted operation: " + operation);
         } else {
