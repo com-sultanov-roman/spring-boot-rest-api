@@ -2,13 +2,9 @@ package com.example.demo.сontroller;
 
 import com.example.demo.model.Operation;
 import com.example.demo.repository.OperationRepository;
-import com.example.demo.service.OperationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,6 +29,8 @@ public class OperationController {
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getOperationById(@RequestParam("id") Long id) throws JsonProcessingException {
+
+
 
         String response = "No such operation";
 
